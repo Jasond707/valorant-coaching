@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for
 from config import Config
-from models import db, Submission  # Import models
+from models import db, Submission
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -8,9 +9,8 @@ app.config.from_object(Config)
 # Initialize the app with the SQLAlchemy database
 db.init_app(app)
 
-# Ensure the database tables are created when the app starts
-with app.app_context():
-    db.create_all()
+# Initialize Flask-Migrate
+migrate = Migrate(app, db)
 
 @app.route('/')
 def home():
@@ -45,5 +45,15 @@ def submit():
 def confirmation():
     return render_template('confirmation.html')  # Your confirmation page
 
+# Handle errors globally
+@app.errorhandler(500)
+def internal_error(error):
+    return "500 Error - Internal Server Error", 500
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return "404 Error - Page Not Found", 404
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
+
