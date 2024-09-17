@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for
 from config import Config
 from models import db, Submission
 from flask_migrate import Migrate
+import os
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -23,10 +24,14 @@ def submit():
     message = request.form.get('message')
     clips = request.files.getlist('clips')
 
+    # Ensure 'uploads' directory exists
+    if not os.path.exists('uploads'):
+        os.makedirs('uploads')
+
     # Save the uploaded clips
     for clip in clips:
-        if clip:
-            clip.save(f"uploads/{clip.filename}")
+        if clip and clip.filename != '':
+            clip.save(os.path.join('uploads', clip.filename))
 
     # Save form data to the database
     new_submission = Submission(discord_name=discord_name, tracker_link=tracker_link, message=message)
@@ -56,4 +61,3 @@ def not_found_error(error):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
-
