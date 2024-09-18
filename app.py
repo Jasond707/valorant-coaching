@@ -1,65 +1,38 @@
 from flask import Flask, request, render_template, redirect, url_for
-from config import Config
-from models import db, Submission
-from flask_migrate import Migrate
 import os
 
 app = Flask(__name__)
-app.config.from_object(Config)
-
-# Initialize the app with the SQLAlchemy database
-db.init_app(app)
-
-# Initialize Flask-Migrate
-migrate = Migrate(app, db)
+app.config['UPLOAD_FOLDER'] = 'uploads'
 
 @app.route('/')
 def home():
-    return render_template('index.html')  # Your form page
+    return render_template('index.html')
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    discord_name = request.form.get('discord')
-    tracker_link = request.form.get('tracker')
-    message = request.form.get('message')
-    clips = request.files.getlist('clips')
+    try:
+        # Get form data
+        discord_name = request.form.get('discord')
+        tracker_link = request.form.get('tracker')
+        message = request.form.get('message')
 
-    # Ensure 'uploads' directory exists
-    if not os.path.exists('uploads'):
-        os.makedirs('uploads')
+        # Print form data to console for debugging
+        print(f"Discord Name: {discord_name}")
+        print(f"Tracker Link: {tracker_link}")
+        print(f"Message: {message}")
 
-    # Save the uploaded clips
-    for clip in clips:
-        if clip and clip.filename != '':
-            clip.save(os.path.join('uploads', clip.filename))
-
-    # Save form data to the database
-    new_submission = Submission(discord_name=discord_name, tracker_link=tracker_link, message=message)
-    db.session.add(new_submission)
-    db.session.commit()
-
-    # Print form data to console (for debugging)
-    print(f"Discord Name: {discord_name}")
-    print(f"Tracker Link: {tracker_link}")
-    print(f"Message: {message}")
-
-    # Redirect to confirmation page
-    return redirect(url_for('confirmation'))
+        # Redirect to confirmation page
+        return redirect(url_for('confirmation'))
+    
+    except Exception as e:
+        # Print detailed error to the console for debugging
+        print(f"Error during form submission: {e}")
+        # Return error message with details
+        return f"An error occurred during form submission: {e}", 500
 
 @app.route('/confirmation')
 def confirmation():
-    return render_template('confirmation.html')  # Your confirmation page
-
-# Handle errors globally
-@app.errorhandler(500)
-def internal_error(error):
-    return "500 Error - Internal Server Error", 500
-
-@app.errorhandler(404)
-def not_found_error(error):
-    return "404 Error - Page Not Found", 404
+    return render_template('confirmation.html')
 
 if __name__ == '__main__':
-    # Use the port provided by Heroku or default to 5000
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
