@@ -1,9 +1,24 @@
 from flask import Flask, request, render_template, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
 import os
-import psycopg2
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads'
+
+# Configure the app to use the PostgreSQL database
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+# Define the Submission model
+class Submission(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    discord_name = db.Column(db.String(100), nullable=False)
+    tracker_link = db.Column(db.String(100), nullable=False)
+    message = db.Column(db.Text, nullable=False)
 
 @app.route('/')
 def home():
@@ -22,6 +37,17 @@ def submit():
         print(f"Tracker Link: {tracker_link}")
         print(f"Message: {message}")
 
+        # Create a new Submission object
+        new_submission = Submission(
+            discord_name=discord_name,
+            tracker_link=tracker_link,
+            message=message
+        )
+
+        # Add the new submission to the database
+        db.session.add(new_submission)
+        db.session.commit()
+
         # Redirect to confirmation page
         return redirect(url_for('confirmation'))
     
@@ -34,5 +60,4 @@ def submit():
 @app.route('/confirmation')
 def confirmation():
     return render_template('confirmation.html')
-
 
