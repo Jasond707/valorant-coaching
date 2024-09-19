@@ -8,8 +8,8 @@
   ],
   "routes": [
     {
-      "src": "/static/videos/(.*)",
-      "dest": "/static/videos/$1"
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
     },
     {
       "src": "/(.*)",
