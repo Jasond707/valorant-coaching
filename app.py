@@ -34,4 +34,7 @@ def submit():
 def confirmation():
     return render_template('confirmation.html')
 
+if __name__ == '__main__':
+    app.run(debug=True)
+
 
