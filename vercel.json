@@ -8,8 +8,8 @@
   ],
   "routes": [
     {
-      "src": "/static/montage.mp4",
-      "dest": "/static/montage.mp4"
+      "src": "/static/montagenew.mp4",
+      "dest": "/static/montagenew.mp4"
     },
     {
       "src": "/(.*)",
