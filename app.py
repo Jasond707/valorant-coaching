@@ -1,6 +1,5 @@
 from flask import Flask, request, render_template, redirect, url_for
 import os
-import psycopg2
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
