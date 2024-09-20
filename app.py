@@ -1,8 +1,16 @@
 from flask import Flask, request, render_template, redirect, url_for
 import os
+from config import Config
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config.from_object(Config)
+
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 @app.route('/')
 def home():
