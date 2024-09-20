@@ -2926,8 +2926,10 @@ input, select, textarea {
 	}
 
 	.gallery {
-		flex-wrap: wrap;
-		width: calc(100% + 0.25rem);
+		display: flex;
+    	flex-wrap: wrap;
+    	margin: -1.25rem 0 0 0.75rem;
+    	width: calc(100% + 0.25rem);
 	}
 
 		.gallery a {
