@@ -2926,9 +2926,7 @@ input, select, textarea {
 	}
 
 	.gallery {
-		display: flex;
 		flex-wrap: wrap;
-		margin: -1.25rem 0 0 -1.25rem;
 		width: calc(100% + 1.25rem);
 	}
 
@@ -2948,6 +2946,7 @@ input, select, textarea {
 				object-fit: cover;
 				object-position: center;
 				width: 100%;
+				margin-left: -22px;
 			}
 
 			.gallery a.landscape {
@@ -3115,8 +3114,9 @@ input, select, textarea {
 		@media screen and (max-width: 736px) {
 
 			.gallery {
-				margin: -0.625rem 0 0 -0.625rem;
-				width: calc(100% + 0.625rem);
+				margin: -4.625rem 0 0 -4.625rem;
+        		width: calc(100% + 1.625rem);
+        		scale: 0.7;
 			}
 
 				.gallery a {
@@ -3145,8 +3145,8 @@ input, select, textarea {
 				min-height: 0;
 			}
 
-			.gallery a.landscape img {
-				height: 12rem;
+			.gallery a.landscape img {			 
+        		width: 35rem;
 			}
 
 			.gallery a.portrait img {
