@@ -2927,7 +2927,7 @@ input, select, textarea {
 
 	.gallery {
 		flex-wrap: wrap;
-		width: calc(100% + 1.25rem);
+		width: calc(100% + 0.25rem);
 	}
 
 		.gallery a {
