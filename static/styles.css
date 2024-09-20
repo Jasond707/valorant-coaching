@@ -2930,6 +2930,7 @@ input, select, textarea {
     	flex-wrap: wrap;
     	margin: -1.25rem 0 0 0.75rem;
     	width: calc(100% + 1.25rem);
+		padding-left: 0.25rem;
 	}
 
 		.gallery a {
